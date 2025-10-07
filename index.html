@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: Email Threat Interceptor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #FFFFFF;
+            --bg-alt: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --text-dark: #111827;
+            --text-light: #4B5563;
+            --accent-primary: #6366F1;
+            --accent-secondary: #EC4899;
+            --border-color: #E5E7EB;
+            --shadow-light: rgba(0,0,0,0.05);
+            --shadow-medium: rgba(0,0,0,0.1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 17px;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 30px; }
+
+        /* Animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* COMBINED INTRO SECTION */
+        .intro-section {
+            padding: 120px 0;
+            background-color: var(--bg-alt);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .intro-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .intro-header {
+            max-width: 850px;
+            margin-bottom: 70px;
+        }
+        .intro-header h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            letter-spacing: -2px;
+        }
+        .intro-header h1 span {
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .intro-header p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+        .intro-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            text-align: left;
+        }
+        .feature-card {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+        }
+        .feature-card .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+        }
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* General Section Styling */
+        section { padding: 100px 0; }
+        #showcase { padding-bottom: 50px; }
+        section:nth-child(even) { background-color: var(--bg-alt); }
+        .section-header { text-align: center; margin-bottom: 70px; }
+        .section-header h2 {
+            font-size: 3rem; font-weight: 700;
+            color: var(--text-dark); margin-bottom: 15px; letter-spacing: -1px;
+        }
+        .section-header p { font-size: 1.2rem; color: var(--text-light); max-width: 700px; margin: 0 auto; }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px; text-align: center; background-color: var(--bg-main); padding: 80px 40px;
+        }
+        .stat-item .icon { font-size: 2.5rem; margin-bottom: 10px; line-height: 1; }
+        .stat-number { font-size: 3.5rem; font-weight: 800; color: var(--accent-primary); line-height: 1.2; }
+        .stat-label { font-size: 1.1rem; color: var(--text-light); font-weight: 500; }
+        
+        /* Showcase Section - ZIGZAG LAYOUT */
+        .result-block {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-bottom: 80px;
+        }
+        .result-block .result-image {
+            flex-basis: 50%;
+            flex-shrink: 0;
+        }
+        .result-block .result-image img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 15px 45px var(--shadow-medium);
+        }
+        .result-block .result-description {
+            flex-basis: 50%;
+        }
+        .result-block.reverse {
+            flex-direction: row-reverse;
+        }
+        .result-description .risk-tag {
+            display: inline-block; padding: 4px 12px;
+            border-radius: 20px; font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 12px; color: #fff;
+        }
+        .risk-tag.danger { background-color: #EF4444; }
+        .risk-tag.caution { background-color: #F59E0B; }
+        .risk-tag.secure { background-color: #10B981; }
+        .result-description h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+        .result-description p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        .analysis-breakdown h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        .analysis-breakdown ul { list-style: none; padding-left: 0; }
+        .analysis-breakdown li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+        .analysis-breakdown li i {
+            margin-right: 12px;
+            margin-top: 5px;
+            font-size: 1.1rem;
+        }
+        .analysis-breakdown .fa-check-circle { color: #10B981; }
+        .analysis-breakdown .fa-exclamation-triangle { color: #F59E0B; }
+        .analysis-breakdown .fa-times-circle { color: #EF4444; }
+        @media (max-width: 900px) {
+            .result-block, .result-block.reverse {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+            .analysis-breakdown li { text-align: left; }
+        }
+        
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 80px 20px;
+            background-color: var(--bg-main);
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+        .footer-content p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 25px;
+        }
+        .footer-content .footer-main-link {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .footer-content .footer-main-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-primary);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.3s ease-out;
+        }
+        .footer-content .footer-main-link:hover::after {
+            transform: scaleX(1);
+        }
+        .footer-links {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .footer-links a {
+            color: var(--text-light); /* Default text color for the label */
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+        .footer-links i {
+            font-size: 1.2rem;
+        }
+        /* NEW: Specific colors for each icon */
+        .footer-links .fa-github { color: #333; } /* GitHub color */
+        .footer-links .fa-linkedin { color: #0A66C2; } /* LinkedIn color */
+        .footer-links .fa-envelope { color: #D14836; } /* Generic email/Google red */
+
+        footer p.copyright {
+            margin-top: 40px;
+            font-size: 0.95rem;
+            color: #9CA3AF; /* Lighter grey for copyright */
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="intro-section">
+        <div class="container intro-container">
+            <div class="intro-header">
+                <h1>Email Threat <span>Interceptor</span></h1>
+                <p>
+                    The Interceptor provides a final, critical layer of defense by analyzing the digital DNA of every email before you engage. It scrutinizes each component—from sender authentication records to domain reputation and link safety—translating complex signals into actionable intelligence. This empowers you to see the threats that traditional security solutions often miss.
+                </p>
+            </div>
+            <div class="intro-features-grid">
+                <div class="feature-card">
+                    <div class="icon"><i class="fas fa-search-dollar"></i></div>
+                    <div class="feature-text">
+                        <h3>Demystify Threats</h3>
+                        <p>Translates complex technical data into simple, color-coded verdicts, making advanced security accessible to everyone.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fas fa-eye"></i></div>
+                    <div class="feature-text">
+                        <h3>Expose Hidden Dangers</h3>
+                        <p>A local AI-driven scan detects invisible tracking pixels and deceptive links where the text doesn't match the destination.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="feature-text">
+                        <h3>Prevent Click-Based Attacks</h3>
+                        <p>Scans every URL against a real-time database of malicious sites, serving as a crucial last line of defense.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="stats-section scroll-animate">
+            <div class="stat-item">
+                <div class="icon">🛡️</div>
+                <div class="stat-number" data-target="4">0</div><div class="stat-label">Core Security Checks</div>
+            </div>
+            <div class="stat-item">
+                <div class="icon">🔌</div>
+                <div class="stat-number" data-target="4">0</div><div class="stat-label">Integrated APIs</div>
+            </div>
+            <div class="stat-item">
+                <div class="icon">⚡</div>
+                <div class="stat-number" data-target="1500">0</div><div class="stat-label">Milliseconds to Verdict</div>
+            </div>
+        </section>
+
+        <section id="showcase">
+            <div class="section-header scroll-animate">
+                <h2>Interactive Results Showcase</h2>
+                <p>A gallery of real-world threat detections and how the Interceptor analyzes them.</p>
+            </div>
+            
+            <div class="showcase-container">
+                <div class="result-block scroll-animate">
+                    <div class="result-image">
+                        <img src="./Results/Result1.png" alt="Danger Result">
+                    </div>
+                    <div class="result-description">
+                        <span class="risk-tag danger">DANGER</span>
+                        <h3>Case Study: Malicious URL</h3>
+                        <p><strong>Verdict: High-Confidence Threat.</strong> This email contains a link that has been confirmed as malicious by multiple security vendors. Clicking it would likely lead to a phishing site designed to steal credentials or deploy malware.</p>
+                        <div class="analysis-breakdown">
+                            <h4>Analysis Breakdown:</h4>
+                            <ul>
+                                <li><i class="fas fa-times-circle"></i> <strong>Real-Time Scan Failure:</strong> The URL was cross-referenced with VirusTotal's live database and flagged as a known threat.</li>
+                                <li><i class="fas fa-times-circle"></i> <strong>Deceptive Link Text:</strong> The visible text of the link did not match its true destination, a common tactic to hide malicious intent.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-block reverse scroll-animate">
+                    <div class="result-image">
+                        <img src="./Results/Result3.png" alt="Caution Result">
+                    </div>
+                    <div class="result-description">
+                        <span class="risk-tag caution">CAUTION</span>
+                        <h3>Case Study: Combined Risk Factors</h3>
+                        <p><strong>Verdict: Suspicious Activity Detected.</strong> While not confirmed to be malicious, this email exhibits a combination of traits commonly used in phishing campaigns. User discretion is strongly advised.</p>
+                        <div class="analysis-breakdown">
+                            <h4>Analysis Breakdown:</h4>
+                            <ul>
+                                <li><i class="fas fa-exclamation-triangle"></i> <strong>URL Obfuscation:</strong> A URL shortener (e.g., bit.ly) was used, preventing the user from seeing the final destination of the link.</li>
+                                <li><i class="fas fa-exclamation-triangle"></i> <strong>New Domain:</strong> The sender's domain was registered less than one year ago. Attackers frequently use new domains to evade reputation-based filters.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-block scroll-animate">
+                    <div class="result-image">
+                        <img src="./Results/Result2.png" alt="Secure Result">
+                    </div>
+                    <div class="result-description">
+                        <span class="risk-tag secure">SECURE</span>
+                        <h3>Case Study: Trust Verified</h3>
+                        <p><strong>Verdict: High-Confidence Legitimacy.</strong> This email passed all technical checks and originates from a highly reputable source, giving you confidence that it is safe to interact with.</p>
+                        <div class="analysis-breakdown">
+                            <h4>Analysis Breakdown:</h4>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> <strong>Strong Authentication (DMARC):</strong> The email passed SPF and DKIM checks, cryptographically verifying it was sent from an authorized server.</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Established Domain History:</strong> The sender's domain is over 30 years old, indicating a long-standing and trustworthy online presence.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="scroll-animate">
+        <div class="footer-content">
+            <h3>Ready to Enhance Your Email Security?</h3>
+            <p>Explore the code and contribute to a safer digital world.</p>
+            <a href="https://github.com/chaitanyasreenivas/Email-Threat-Interceptor" target="_blank" class="footer-main-link">View Project on GitHub</a>
+            <div class="footer-links">
+                <a href="https://github.com/chaitanyasreenivas" target="_blank"><i class="fab fa-github"></i> My GitHub</a>
+                <a href="https://www.linkedin.com/in/chaitanya-sreenivas" target="_blank"><i class="fab fa-linkedin"></i> My LinkedIn</a>
+                <a href="mailto:chaitanyasreenivas1999@gmail.com"><i class="fas fa-envelope"></i> Contact Me</a>
+            </div>
+            <p class="copyright">&copy; 2025 Email Threat Interceptor. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- On-Scroll Animations ---
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.scroll-animate').forEach(section => {
+                scrollObserver.observe(section);
+            });
+
+            // --- Animated Statistics ---
+            const animateStat = (num, target, duration) => {
+                const startTime = performance.now();
+                const step = (timestamp) => {
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    num.textContent = Math.floor(progress * target).toLocaleString();
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            };
+            const statsObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const statNumbers = entry.target.querySelectorAll('.stat-number');
+                        statNumbers.forEach(num => {
+                            const target = +num.getAttribute('data-target');
+                            animateStat(num, target, 1500);
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                statsObserver.observe(statsSection);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Hybrid Domain Scanner",
+  "version": "5.0",
+  "description": "Scans email for technical issues and deceptive content.",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mail.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "host_permissions": [
+    "https://api.mxtoolbox.com/",
+    "https://api.ip2whois.com/",
+    "https://www.virustotal.com/",
+    "https://urlscan.io/"
+  ]
+}
